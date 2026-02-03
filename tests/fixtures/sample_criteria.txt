@@ -1,0 +1,13 @@
+STUDY: Chronic Kidney Disease with Type 2 Diabetes Study
+
+INCLUSION CRITERIA:
+1. Adults aged 18 to 75 years at enrollment
+2. Diagnosis of Type 2 Diabetes Mellitus in the past 5 years
+3. Chronic Kidney Disease Stage 3 or 4 (eGFR 15-59 mL/min/1.73m²)
+4. Currently prescribed and taking Metformin for at least 90 consecutive days
+
+EXCLUSION CRITERIA:
+1. History of heart failure or acute myocardial infarction
+2. Chronic Kidney Disease Stage 5 (eGFR <15 mL/min/1.73m²)
+3. Active malignancy (cancer diagnosis in the past 2 years)
+4. Pregnancy or nursing

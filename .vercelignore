@@ -1,0 +1,47 @@
+# Environment
+.env
+.env.local
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+tests/
+*.egg-info/
+
+# Documentation (keep only essential)
+IMPLEMENTATION_PLAN.md
+QUICKSTART.md
+agents_prompts.md
+
+# Build artifacts
+dist/
+build/
+*.egg
+
+# Temporary files
+cyan_theme_updates.css
+test_*.json
+demo_run.py
+full_demo.py
+api_server.py
+api_server_refactored.py

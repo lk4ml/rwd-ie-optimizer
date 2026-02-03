@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: rwd-ie-optimizer-backend
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: OPENAI_API_KEY
+        sync: false  # Set in Render dashboard (encrypted)
+      - key: ANTHROPIC_API_KEY
+        sync: false  # Set in Render dashboard (encrypted)
+      - key: MODEL_DEFAULT
+        value: gpt-4o
+      - key: MODEL_RESEARCH
+        value: gpt-4-turbo
+      - key: MODEL_CODING
+        value: gpt-4o
+      - key: MAX_TOKENS
+        value: 2000
+      - key: QUERY_TIMEOUT_SECONDS
+        value: 30
+      - key: DATABASE_PATH
+        value: /opt/render/project/src/data/rwd_claims.db
+    healthCheckPath: /health
+    autoDeploy: true

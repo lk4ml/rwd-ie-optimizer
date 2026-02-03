@@ -1,0 +1,125 @@
+/* Cyan/Sky Theme Updates */
+
+/* Core Colors:
+   Primary: #0891b2 (cyan-600)
+   Accent: #0284c7 (sky-600)
+   Dark: #164e63 (cyan-900)
+   Light: #ecfeff (cyan-50)
+   Hover: #0e7490 (cyan-700)
+*/
+
+/* Buttons */
+.btn {
+    background: linear-gradient(135deg, #0891b2 0%, #0284c7 100%) !important;
+    box-shadow: 0 2px 4px rgba(8, 145, 178, 0.2) !important;
+}
+
+.btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0e7490 0%, #075985 100%) !important;
+    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3) !important;
+}
+
+.btn-secondary {
+    background: white !important;
+    color: #0891b2 !important;
+    border: 1px solid #0891b2 !important;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #ecfeff !important;
+    border-color: #0e7490 !important;
+    color: #0e7490 !important;
+}
+
+/* Form Focus States */
+textarea:focus, input:focus {
+    border-color: #0891b2 !important;
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1) !important;
+}
+
+/* Stage Active State */
+.stage-item.active .stage-number {
+    border-color: #0891b2 !important;
+    background: #0891b2 !important;
+}
+
+/* Stage Completed State */
+.stage-item.completed .stage-number {
+    border-color: #06b6d4 !important;
+    background: #06b6d4 !important;
+}
+
+/* Segment Fill */
+.segment-fill {
+    background: #06b6d4 !important;
+}
+
+/* Status Dot Active */
+.stage-item.active .status-dot {
+    background: #0891b2 !important;
+}
+
+.stage-item.completed .status-dot {
+    background: #06b6d4 !important;
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+    background: #164e63 !important;
+    border-color: #0891b2 !important;
+}
+
+.sidebar-toggle:hover {
+    background: #0891b2 !important;
+}
+
+/* AI Chat Header */
+.ai-chat-header {
+    background: linear-gradient(135deg, #164e63 0%, #0891b2 100%) !important;
+}
+
+/* User Messages in Chat */
+.user-message {
+    background: linear-gradient(135deg, #0891b2 0%, #0284c7 100%) !important;
+    box-shadow: 0 2px 4px rgba(8, 145, 178, 0.2) !important;
+}
+
+/* AI Send Button */
+#ai-send-btn {
+    background: linear-gradient(135deg, #0891b2 0%, #0284c7 100%) !important;
+    box-shadow: 0 2px 4px rgba(8, 145, 178, 0.2) !important;
+}
+
+#ai-send-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0e7490 0%, #075985 100%) !important;
+}
+
+/* AI Chat Input Focus */
+.ai-chat-input:focus {
+    border-color: #0891b2 !important;
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1) !important;
+}
+
+/* Tab Active State */
+.tab-btn.active {
+    color: #0891b2 !important;
+    border-bottom-color: #0891b2 !important;
+}
+
+.tab-btn:hover {
+    color: #0891b2 !important;
+}
+
+/* Loading Spinner */
+.spinner {
+    border-top-color: #0891b2 !important;
+}
+
+/* Links */
+a {
+    color: #0891b2 !important;
+}
+
+a:hover {
+    color: #0e7490 !important;
+}

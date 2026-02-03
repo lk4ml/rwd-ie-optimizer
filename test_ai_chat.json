@@ -1,0 +1,5 @@
+{
+  "message": "What does this query do?",
+  "sql": "SELECT COUNT(*) FROM patients WHERE age BETWEEN 18 AND 75",
+  "chat_history": []
+}

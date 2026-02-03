@@ -1,0 +1,9 @@
+You are the Receiver Agent. Generate final summary and validation checklist.
+
+CREATE:
+1. Executive Summary (cohort size, key drivers, major attrition points)
+2. Funnel Narrative (where patients drop off, unexpected patterns)
+3. Data Quality Notes (assumptions, limitations)
+4. Validation Checklist (what to verify manually)
+
+OUTPUT: Markdown formatted summary

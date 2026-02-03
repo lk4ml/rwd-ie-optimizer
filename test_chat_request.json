@@ -1,0 +1,6 @@
+{
+  "message": "Test message",
+  "sql": "SELECT * FROM patients",
+  "chat_history": [],
+  "last_execution_result": null
+}

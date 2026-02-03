@@ -1,0 +1,18 @@
+# OpenAI API Configuration
+OPENAI_API_KEY=sk-your-api-key-here
+
+# Model Configuration
+MODEL_DEFAULT=gpt-4o
+MODEL_RESEARCH=gpt-4-turbo
+MODEL_CODING=gpt-4o
+
+# Database Configuration
+DATABASE_PATH=data/rwd_claims.db
+
+# Logging
+LOG_LEVEL=INFO
+LOG_FILE=logs/rwd_ie_optimizer.log
+
+# System Settings
+MAX_ITERATIONS=10
+QUERY_TIMEOUT_SECONDS=30
