@@ -12,8 +12,9 @@ from rich.panel import Panel
 from rich.syntax import Syntax
 from rich.table import Table
 from rich.markdown import Markdown
-from swarm import Swarm
-from src.agents.agents import orchestrator_agent
+from src.services.ai_service import get_ai_service
+from src.services.funnel_service import get_funnel_service
+from src.tools.sql_executor import run_sql
 from src.config.settings import settings
 
 app = typer.Typer()
@@ -26,7 +27,7 @@ def display_banner():
 [bold cyan]RWD IE Optimizer[/bold cyan]
 Convert clinical trial inclusion/exclusion criteria to SQL over real-world data
 
-[dim]Powered by OpenAI Agent SDK (Swarm)[/dim]
+[dim]Powered by OpenAI SDK (Agent Runtime)[/dim]
     """
     console.print(Panel(banner_text, border_style="cyan"))
 
@@ -72,9 +73,9 @@ def display_repl_output(context: dict):
 
         for step in funnel_steps:
             table.add_row(
-                step.get("step_name", "Unknown"),
-                str(step.get("n", 0)),
-                f"{step.get("pct_of_base", 0):.1f}%"
+                step.get("step_name", step.get("step", "Unknown")),
+                str(step.get("n", step.get("count", 0))),
+                f"{step.get('pct_of_base', step.get('pct', 0)):.1f}%"
             )
 
         console.print(table)
@@ -153,8 +154,8 @@ def run():
     console.print(f"\n[green]✓[/green] Received {len(user_ie_text)} characters of I/E criteria")
     console.print("\n[bold cyan]Processing with multi-agent system...[/bold cyan]\n")
 
-    # Initialize Swarm client
-    client = Swarm()
+    ai_service = get_ai_service()
+    funnel_service = get_funnel_service()
 
     # Initialize context
     context = {
@@ -169,63 +170,47 @@ def run():
         "iteration": 0,
     }
 
-    # Initial message to orchestrator
-    messages = [
-        {
-            "role": "user",
-            "content": f"""I need help converting the following clinical trial I/E criteria into SQL over our RWD database.
-
-Please follow the complete workflow:
-1. Parse this text into Criteria DSL JSON
-2. Resolve all medical concepts to codes
-3. Generate SQL queries for cohort identification
-4. Execute the SQL and show me the funnel
-
-Here are the I/E criteria:
-
-{user_ie_text}
-
-Please begin by transferring to the IE_Interpreter agent to parse this criteria."""
-        }
-    ]
-
     # Run workflow
     try:
         max_iterations = 5
-        current_iteration = 0
+        current_iteration = 1
+
+        # Initial pass: parse -> resolve -> generate -> execute
+        console.print("[dim]Iteration 1...[/dim]")
+        criteria_dsl = ai_service.parse_criteria(user_ie_text)
+        resolved_concepts = ai_service.resolve_concepts(criteria_dsl)
+        sql_cohort = ai_service.generate_sql(criteria_dsl)
+
+        exec_result = run_sql(sql_cohort, mode="preview")
+        funnel_steps = (
+            funnel_service.calculate_funnel(criteria_dsl, exec_result)
+            if exec_result.get("ok")
+            else []
+        )
+
+        context.update(
+            {
+                "criteria_dsl": criteria_dsl,
+                "resolved_concepts": resolved_concepts,
+                "sql_cohort": sql_cohort,
+                "funnel_steps": funnel_steps,
+                "warnings": exec_result.get("warnings", []) if exec_result else [],
+                "next_action": "Review the SQL and funnel. Provide feedback to iterate or type 'finalize'.",
+                "iteration": current_iteration,
+            }
+        )
+
+        if exec_result and not exec_result.get("ok"):
+            context["warnings"].append(exec_result.get("error", "SQL execution failed"))
+
+        display_repl_output(context)
 
         while current_iteration < max_iterations and not context.get("finalized"):
             current_iteration += 1
 
-            console.print(f"[dim]Iteration {current_iteration}...[/dim]")
-
-            # Run Swarm
-            response = client.run(
-                agent=orchestrator_agent,
-                messages=messages,
-                context_variables=context,
+            feedback = console.input(
+                "\n[bold]Your feedback (or type 'finalize' to complete, 'quit' to exit):[/bold] "
             )
-
-            # Update context from response
-            if hasattr(response, 'context_variables'):
-                context.update(response.context_variables)
-
-            # Extract messages
-            if hasattr(response, 'messages'):
-                for msg in response.messages:
-                    if msg.get("role") == "assistant" and msg.get("content"):
-                        messages.append(msg)
-
-            # Display current state
-            display_repl_output(context)
-
-            # Check if we should continue
-            if context.get("finalized"):
-                console.print("\n[bold green]✓ Workflow complete![/bold green]")
-                break
-
-            # Get user feedback
-            feedback = console.input("\n[bold]Your feedback (or type 'finalize' to complete, 'quit' to exit):[/bold] ")
 
             if feedback.lower() in ["quit", "exit", "q"]:
                 console.print("\n[yellow]Exiting...[/yellow]")
@@ -233,14 +218,37 @@ Please begin by transferring to the IE_Interpreter agent to parse this criteria.
 
             if feedback.lower() in ["finalize", "good", "approve", "ship it", "done"]:
                 context["finalized"] = True
-                messages.append({
-                    "role": "user",
-                    "content": "Please finalize this workflow and transfer to the Receiver agent for the final summary."
-                })
-                continue
+                console.print("\n[bold green]✓ Workflow complete![/bold green]")
+                break
 
-            # Add user feedback to conversation
-            messages.append({"role": "user", "content": feedback})
+            console.print(f"[dim]Iteration {current_iteration}...[/dim]")
+
+            sql_cohort = ai_service.generate_sql(
+                criteria_dsl,
+                feedback=feedback,
+                previous_sql=sql_cohort,
+            )
+
+            exec_result = run_sql(sql_cohort, mode="preview")
+            funnel_steps = (
+                funnel_service.calculate_funnel(criteria_dsl, exec_result)
+                if exec_result.get("ok")
+                else []
+            )
+
+            context.update(
+                {
+                    "sql_cohort": sql_cohort,
+                    "funnel_steps": funnel_steps,
+                    "warnings": exec_result.get("warnings", []) if exec_result else [],
+                    "iteration": current_iteration,
+                }
+            )
+
+            if exec_result and not exec_result.get("ok"):
+                context["warnings"].append(exec_result.get("error", "SQL execution failed"))
+
+            display_repl_output(context)
 
     except KeyboardInterrupt:
         console.print("\n\n[yellow]Interrupted by user.[/yellow]")

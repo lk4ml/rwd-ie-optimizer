@@ -1,6 +1,8 @@
 # RWD IE Optimizer - Implementation Plan
 ## Using OpenAI Agent SDK (Swarm) with SQLite Backend
 
+> Note: This plan was drafted when OpenAI Swarm was used. The codebase now uses the OpenAI SDK with an internal agent runtime. Remaining Swarm references are historical.
+
 **Date:** December 17, 2025
 **Database:** SQLite with synthetic claims data (6 tables, 500 patients, 3,500 claims)
 **AI Models:** GPT-4o, GPT-4-turbo

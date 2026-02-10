@@ -1,15 +1,16 @@
 """
-All agents for the RWD IE Optimizer using OpenAI Swarm.
+All agents for the RWD IE Optimizer using the internal agent runtime.
 
 This module defines all 6 agents and their coordination logic.
 """
 
-from swarm import Agent
+from src.agent_runtime import Agent
 from src.tools.catalog import get_catalog
 from src.tools.concept_search import search_concepts
 from src.tools.unit_resolver import resolve_units
 from src.tools.sql_executor import run_sql
 from src.tools.artifact_store import save_artifact
+from src.config.settings import settings
 from pathlib import Path
 
 
@@ -32,9 +33,9 @@ def load_prompt(agent_name: str) -> str:
 # Parses raw I/E text into Criteria DSL JSON
 ie_interpreter_agent = Agent(
     name="IE_Interpreter",
-    model="gpt-4o",
+    model=settings.MODEL_DEFAULT,
     instructions=load_prompt("ie_interpreter"),
-    functions=[],  # No tools needed, pure LLM parsing
+    tools=[],  # No tools needed, pure LLM parsing
 )
 
 
@@ -42,9 +43,9 @@ ie_interpreter_agent = Agent(
 # Resolves medical concepts to database codes
 deep_research_agent = Agent(
     name="Deep_Research",
-    model="gpt-4-turbo",
+    model=settings.MODEL_RESEARCH,
     instructions=load_prompt("deep_research"),
-    functions=[get_catalog, search_concepts, resolve_units],
+    tools=[get_catalog, search_concepts, resolve_units],
 )
 
 
@@ -52,9 +53,9 @@ deep_research_agent = Agent(
 # Generates SQL from Criteria DSL + Resolved Concepts
 coding_agent = Agent(
     name="Coding_Agent",
-    model="gpt-4o",
+    model=settings.MODEL_CODING,
     instructions=load_prompt("coding_agent"),
-    functions=[get_catalog],
+    tools=[get_catalog],
 )
 
 
@@ -62,9 +63,9 @@ coding_agent = Agent(
 # Executes and validates SQL
 sql_runner_agent = Agent(
     name="SQL_Runner",
-    model="gpt-4o",
+    model=settings.MODEL_DEFAULT,
     instructions=load_prompt("sql_runner"),
-    functions=[run_sql],
+    tools=[run_sql],
 )
 
 
@@ -72,9 +73,9 @@ sql_runner_agent = Agent(
 # Generates final summary
 receiver_agent = Agent(
     name="Receiver",
-    model="gpt-4o",
+    model=settings.MODEL_DEFAULT,
     instructions=load_prompt("receiver"),
-    functions=[save_artifact],
+    tools=[save_artifact],
 )
 
 
@@ -111,9 +112,9 @@ def transfer_to_receiver():
 # Main controller that coordinates all other agents
 orchestrator_agent = Agent(
     name="Orchestrator",
-    model="gpt-4o",
+    model=settings.MODEL_DEFAULT,
     instructions=load_prompt("orchestrator"),
-    functions=[
+    tools=[
         transfer_to_ie_interpreter,
         transfer_to_deep_research,
         transfer_to_coding_agent,

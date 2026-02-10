@@ -151,7 +151,7 @@ async def process_criteria(input_data):
             │
 ┌───────────▼─────────────┐
 │   Agent Layer           │  src/agents/
-│   - Swarm agents        │  - agents.py
+│   - Agent runtime agents        │  - agents.py
 └───────────┬─────────────┘
             │
 ┌───────────▼─────────────┐

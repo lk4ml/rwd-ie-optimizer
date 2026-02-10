@@ -4,7 +4,7 @@ Convert clinical trial inclusion/exclusion criteria into executable SQL queries 
 
 ## Overview
 
-This system uses a multi-agent architecture powered by OpenAI's Agent SDK (Swarm) to transform natural language clinical trial eligibility criteria into validated SQL queries and patient funnels.
+This system uses a multi-agent architecture powered by the OpenAI SDK (tool-calling) via an internal agent runtime to transform natural language clinical trial eligibility criteria into validated SQL queries and patient funnels.
 
 ### Key Features
 
@@ -21,7 +21,7 @@ This system uses a multi-agent architecture powered by OpenAI's Agent SDK (Swarm
 ```
 User I/E Text
      ↓
-Orchestrator Agent (REPL Controller)
+AI Service (Pipeline Orchestrator)
      ↓
 IE Interpreter Agent → Criteria DSL JSON
      ↓
@@ -235,7 +235,7 @@ pytest tests/
 
 ### Adding New Agents
 
-See `src/agents/` for examples of agent implementation using OpenAI Swarm.
+See `src/agents/` for examples of agent implementation using the internal agent runtime.
 
 ### Extending Concept Mappings
 

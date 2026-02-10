@@ -41,7 +41,7 @@ src/
 │   ├── ai_service.py    # AI/LLM operations
 │   └── funnel_service.py # Funnel calculations
 │
-├── agents/           # AI Agents (Swarm)
+├── agents/           # AI Agents (Agent Runtime)
 │   └── agents.py     # Agent definitions
 │
 ├── tools/            # Data Access Layer
@@ -98,14 +98,14 @@ src/config/prompts/
 graph LR
     UI[Frontend] --> API[API Routes]
     API --> AIService[AI Service]
-    AIService --> Agents[Swarm Agents]
+    AIService --> Agents[Agent Runtime Agents]
     Agents --> Tools[Database Tools]
     Tools --> DB[(SQLite)]
 ```
 
 **1. User enters criteria** → Frontend
 **2. API receives request** → Routes layer
-**3. AI processes** → AI Service → Swarm Agents
+**3. AI processes** → AI Service → Agent Runtime Agents
 **4. SQL executes** → Database
 **5. Results return** → Frontend
 
@@ -372,7 +372,7 @@ CMD ["python", "api_server_refactored.py"]
 
 ## 🙏 Acknowledgments
 
-- OpenAI Swarm for multi-agent framework
+- OpenAI SDK + internal agent runtime for multi-agent framework
 - Anthropic Claude for AI assistance
 - FastAPI for modern web framework
 

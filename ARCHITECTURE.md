@@ -41,7 +41,7 @@ graph TB
         Funnel[Funnel Service]
     end
 
-    subgraph Agents["AI Agents (OpenAI Swarm)"]
+    subgraph Agents["AI Agents (Agent Runtime)"]
         IE[IE Interpreter Agent]
         DR[Deep Research Agent]
         CA[Coding Agent]
@@ -121,7 +121,7 @@ graph LR
         Chat[chat]
     end
 
-    subgraph Agents["OpenAI Swarm Agents"]
+    subgraph Agents["OpenAI SDK Agents"]
         IE[IE Interpreter<br/>GPT-4o]
         DR[Deep Research<br/>GPT-4-turbo]
         CA[Coding Agent<br/>GPT-4o]
@@ -159,7 +159,7 @@ rwd_ie_optimizer/
 │   │
 │   ├── agents/                    # AI Agents
 │   │   ├── __init__.py
-│   │   └── agents.py             # Swarm agent definitions
+│   │   └── agents.py             # Agent definitions
 │   │
 │   ├── tools/                     # Data Tools
 │   │   ├── __init__.py
@@ -227,7 +227,7 @@ Patient funnel calculations:
 
 ### 3. Agents Layer (`src/agents/`)
 
-**Purpose:** AI agent definitions using OpenAI Swarm
+**Purpose:** AI agent definitions using the internal agent runtime
 
 **Agents:**
 1. **IE Interpreter** - Parses raw I/E text into JSON
@@ -348,7 +348,7 @@ Funnel Steps (Attrition Analysis)
 ### Architecture Pattern
 
 ```
-API Routes → AI Service → Swarm Agents → Tools → Database
+API Routes → AI Service → Agent Runtime → Tools → Database
 ```
 
 **Benefits:**

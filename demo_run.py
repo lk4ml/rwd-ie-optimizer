@@ -8,7 +8,7 @@ import os
 # Load environment variables from .env file
 load_dotenv()
 
-from swarm import Swarm
+from src.agent_runtime import AgentRunner
 from src.agents.agents import orchestrator_agent
 from rich.console import Console
 from rich.panel import Panel
@@ -47,7 +47,7 @@ EXCLUSION CRITERIA:
 
 console.print(Panel.fit(
     "[bold cyan]RWD IE Optimizer - Demo Run[/bold cyan]\n"
-    "Powered by OpenAI Agent SDK (Swarm)",
+    "Powered by OpenAI SDK (Agent Runtime)",
     border_style="cyan"
 ))
 
@@ -56,8 +56,8 @@ console.print(sample_criteria)
 
 console.print("\n[bold cyan]Starting multi-agent workflow...[/bold cyan]\n")
 
-# Initialize Swarm client
-client = Swarm()
+# Initialize agent runner
+client = AgentRunner()
 
 # Initial message
 messages = [

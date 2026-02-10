@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from swarm import Swarm
+from src.agent_runtime import AgentRunner
 from src.agents.agents import (
     ie_interpreter_agent,
     deep_research_agent,
@@ -40,8 +40,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Swarm client
-client = Swarm()
+# Initialize agent runner
+client = AgentRunner()
 
 
 class CriteriaInput(BaseModel):

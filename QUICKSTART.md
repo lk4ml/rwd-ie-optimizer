@@ -2,7 +2,7 @@
 
 ## What We Built
 
-You now have a fully functional RWD IE Optimizer that uses OpenAI Agent SDK (Swarm) to convert clinical trial inclusion/exclusion criteria into executable SQL queries.
+You now have a fully functional RWD IE Optimizer that uses the OpenAI SDK with an internal agent runtime to convert clinical trial inclusion/exclusion criteria into executable SQL queries.
 
 ### ✅ Completed Components
 
@@ -23,7 +23,7 @@ You now have a fully functional RWD IE Optimizer that uses OpenAI Agent SDK (Swa
    - `run_sql()` - Safe SQL execution
    - `save_artifact()` - Result persistence
 
-4. **6 Specialized Agents** (OpenAI Swarm)
+4. **6 Specialized Agents** (Internal Agent Runtime)
    - Orchestrator - Workflow controller
    - IE Interpreter - Text → DSL parser
    - Deep Research - Concept resolver
@@ -360,7 +360,7 @@ User (REPL Display)
 
 **Built:** December 17, 2025
 **Version:** 0.1.0 (MVP)
-**Framework:** OpenAI Agent SDK (Swarm)
+**Framework:** OpenAI SDK (Tool Calling + Internal Agent Runtime)
 
 For issues or questions, refer to the documentation files or check:
 - Agent prompts in `src/config/prompts/`

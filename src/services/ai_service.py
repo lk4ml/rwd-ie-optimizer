@@ -4,7 +4,7 @@ Handles all AI/LLM interactions for the RWD IE Optimizer
 """
 
 from typing import Dict, Any, List, Optional
-from swarm import Swarm
+from src.agent_runtime import AgentRunner
 import anthropic
 import os
 import re
@@ -21,7 +21,7 @@ class AIService:
     """Centralized service for all AI operations"""
 
     def __init__(self):
-        self.swarm_client = Swarm()
+        self.agent_runner = AgentRunner()
         self.anthropic_client = None
         self._init_anthropic()
 
@@ -32,7 +32,7 @@ class AIService:
             self.anthropic_client = anthropic.Anthropic(api_key=api_key)
 
     # =========================================================================
-    # SWARM AGENT OPERATIONS
+    # AGENT RUNTIME OPERATIONS
     # =========================================================================
 
     def parse_criteria(self, criteria_text: str) -> Dict[str, Any]:
@@ -50,7 +50,7 @@ Return ONLY the JSON, no additional text.
 
 {criteria_text}"""
 
-        response = self.swarm_client.run(
+        response = self.agent_runner.run(
             agent=ie_interpreter_agent,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -82,14 +82,19 @@ Criteria DSL:
 
 Return the resolved concepts with code mappings."""
 
-        response = self.swarm_client.run(
+        response = self.agent_runner.run(
             agent=deep_research_agent,
             messages=[{"role": "user", "content": prompt}]
         )
 
         return response.messages[-1]["content"]
 
-    def generate_sql(self, criteria_dsl: Dict[str, Any]) -> str:
+    def generate_sql(
+        self,
+        criteria_dsl: Dict[str, Any],
+        feedback: Optional[str] = None,
+        previous_sql: Optional[str] = None,
+    ) -> str:
         """
         Generate SQL queries from criteria DSL
 
@@ -112,7 +117,13 @@ Code mappings:
 
 Call get_catalog() first, then generate SQL with CTEs. Return ONLY the SQL in a code block."""
 
-        response = self.swarm_client.run(
+        if previous_sql:
+            prompt += f"""\n\nPrevious SQL:\n```sql\n{previous_sql}\n```\n"""
+
+        if feedback:
+            prompt += f"""\n\nUser feedback to incorporate:\n{feedback}\n"""
+
+        response = self.agent_runner.run(
             agent=coding_agent,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -167,7 +178,7 @@ Please provide:
 
 Format your response in a clear, structured way."""
 
-        response = self.swarm_client.run(
+        response = self.agent_runner.run(
             agent=coding_agent,
             messages=[{"role": "user", "content": prompt}]
         )

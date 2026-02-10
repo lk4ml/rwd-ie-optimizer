@@ -6,7 +6,7 @@ Shows: Parsing → Concept Resolution → SQL Generation → Execution
 from dotenv import load_dotenv
 load_dotenv()
 
-from swarm import Swarm
+from src.agent_runtime import AgentRunner
 from src.agents.agents import (
     ie_interpreter_agent,
     deep_research_agent,
@@ -19,9 +19,10 @@ from rich.panel import Panel
 from rich.syntax import Syntax
 from rich.table import Table
 import json
+import re
 
 console = Console()
-client = Swarm()
+client = AgentRunner()
 
 # Sample I/E criteria
 criteria_text = """
